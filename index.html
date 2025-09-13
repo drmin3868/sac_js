@@ -4,164 +4,447 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Sejong Anesthesiology Calculator</title>
-  <link rel="stylesheet" href="assets/css/style.min.css" />
+
+  <style>
+    :root {
+      --title-bg: #0052cc;
+      --title-fg: #fff;
+      --meta-fg: #c9d6ff;
+      --card-bg: #fff;
+      --card-bd: #ccc;
+      --page-bg: #f2f2f2;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px 0;
+      background: var(--page-bg);
+    }
+
+    .container {
+      width: 1600px;
+      margin: 0 auto;
+    }
+
+    .title-box {
+      font-size: 28px;
+      font-weight: 700;
+      background: var(--title-bg);
+      color: var(--title-fg);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+    }
+
+    .sub-title {
+      margin: 0 0 12px 0;
+      font-size: 20px;
+      font-weight: 700;
+      background: var(--title-bg);
+      color: var(--title-fg);
+      padding: 6px 10px;
+    }
+
+    .top-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      margin-bottom: 24px;
+    }
+
+    .col1-2 {
+      background: var(--title-bg);
+      color: var(--meta-fg);
+      text-align: right;
+      padding: 12px 16px;
+      font-size: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      line-height: 1.35;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 300px 1fr 1fr 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .col2-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-bd);
+      border-radius: 6px;
+      padding: 16px;
+    }
+
+    .col2-1 img {
+      width: 300px;
+      height: auto;
+      display: block;
+      object-fit: contain;
+    }
+
+    .age-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    input[type="number"] {
+      width: 50%;
+      padding: 6px;
+      margin-left: 10px;
+    }
+
+    .chips {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .chip {
+      border: 1px solid #888;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: #fff;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .chip.active {
+      background: #1976d2;
+      color: #fff;
+      border-color: #1976d2;
+    }
+
+    .apply-btn {
+      margin: 20px auto 0;
+      display: block;
+      width: 120px;
+      padding: 6px 10px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .patient-info-line {
+      margin-top: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      white-space: pre-line;
+    }
+
+    .radio-group {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-top: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .radio-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 600;
+    }
+
+    .info-text {
+      font-size: 14px;
+      font-weight: 400;
+      color: #333;
+      margin: 8px 0;
+      text-align: center;
+      background: #f2f2f2;
+      padding: 8px;
+      border: none;
+    }
+
+    /* 폼 테이블 좌측 라벨 셀 */
+    .form-table .label-cell {
+      text-align: center;
+      font-weight: 600;
+      vertical-align: middle;
+    }
+  </style>
 </head>
+
 <body>
   <div class="container">
+    <!-- 상단 타이틀 2컬럼 -->
     <div class="top-layout">
       <div class="title-box">Sejong Anesthesiology Calculator</div>
       <div class="col1-2">
-        <div>Ver. 0.2 Build 2509-0022</div>
-        <div>2025/09/14 · Dr. Min</div>
+        <div>Ver. 0.1 Build 2509-0021</div>
+        <div>2025/09/13 · Dr. Min</div>
       </div>
     </div>
 
+    <!-- 상단 5컬럼 -->
     <div class="layout">
       <!-- col 2-1: 로고 -->
       <div class="col2-1 col2-card">
-        <div class="logo-placeholder">
-          <div class="logo-text">SEJONG</div>
-          <div class="logo-subtext">Anesthesiology</div>
-        </div>
+        <img alt="로고" src="purmi.png" width="300" style="width:300px;height:auto;object-fit:contain;" />
       </div>
 
       <!-- col 2-2: 성별/연령/연령대 -->
       <div class="col2-2 col2-card">
         <h2 class="sub-title">성별, 연령, 연령대</h2>
-        
-        <!-- 오류 메시지 표시 영역 -->
-        <div id="errorMessage" class="error-message" role="alert" aria-live="polite"></div>
-        
         <form id="myForm" novalidate>
-          <table class="form-table">
+          <table class="form-table" style="width:100%;table-layout:fixed;">
             <colgroup>
-              <col style="width:30%">
-              <col style="width:70%">
+              <col style="width:30%" />
+              <col style="width:70%" />
             </colgroup>
+
+            <!-- 행 1: 성별 -->
             <tr>
-              <td class="label-cell">
-                <label id="genderLabel">성별</label>
-              </td>
+              <td class="label-cell">성별</td>
               <td>
-                <div class="chips" data-target="gender" role="radiogroup" aria-labelledby="genderLabel">
-                  <button type="button" class="chip" data-value="Male" role="radio" aria-checked="false" tabindex="0">Male</button>
-                  <button type="button" class="chip" data-value="Female" role="radio" aria-checked="false" tabindex="-1">Female</button>
+                <div class="chips" data-target="gender" role="radiogroup" aria-label="성별 선택">
+                  <button type="button" class="chip" data-value="Male" role="radio" aria-checked="false">Male</button>
+                  <button type="button" class="chip" data-value="Female" role="radio" aria-checked="false">Female</button>
                 </div>
               </td>
             </tr>
+
+            <!-- 행 2: 연령구분 -->
             <tr>
-              <td class="label-cell">
-                <label id="ageTypeLabel">연령<br>구분</label>
-              </td>
+              <td class="label-cell">연령<br>구분</td>
               <td>
-                <div class="chips" data-target="ageType" role="radiogroup" aria-labelledby="ageTypeLabel">
-                  <button type="button" class="chip" data-value="adult" role="radio" aria-checked="false" tabindex="0">Adult</button>
-                  <button type="button" class="chip" data-value="infant" role="radio" aria-checked="false" tabindex="-1">Infant</button>
-                  <button type="button" class="chip" data-value="neonate" role="radio" aria-checked="false" tabindex="-1">Neonate</button>
+                <div class="chips" data-target="ageType" role="radiogroup" aria-label="연령 구분 선택">
+                  <button type="button" class="chip" data-value="adult" role="radio" aria-checked="false">Adult</button><br>
+                  <button type="button" class="chip" data-value="infant" role="radio" aria-checked="false">Infant</button>
+                  <button type="button" class="chip" data-value="neonate" role="radio" aria-checked="false">Neonate</button>
                 </div>
               </td>
             </tr>
+
+            <!-- 행 3: 나이 + 단위 -->
             <tr>
-              <td class="label-cell">
-                <label for="ageValue">나이</label>
-              </td>
+              <td class="label-cell">나이</td>
               <td>
                 <div class="age-row">
-                  <input type="number" id="ageValue" min="1" max="150" step="1" inputmode="numeric" aria-describedby="ageHelp" />
-                  <span id="ageUnit" aria-live="polite"></span>
+                  <input type="number" id="ageValue" min="1" step="1" inputmode="numeric" />
+                  <span id="ageUnit"></span>
                 </div>
-                <div id="ageHelp" class="input-help">연령 구분을 먼저 선택해주세요</div>
               </td>
             </tr>
           </table>
+
           <button type="submit" class="apply-btn">적용</button>
-          <button type="button" id="resetBtn" class="reset-btn">초기화</button>
         </form>
       </div>
 
       <!-- col 2-3: 신체치수 -->
       <div class="col2-3 col2-card">
         <h2 class="sub-title">신체치수</h2>
-        
-        <!-- 신체치수 오류 메시지 -->
-        <div id="bodyErrorMessage" class="error-message" role="alert" aria-live="polite"></div>
-        
-        <div class="input-group">
-          <label for="height">키</label>
+
+        <label>
+          키
           <div class="age-row">
-            <input type="number" id="height" min="10" max="300" step="0.1" inputmode="decimal" aria-describedby="heightHelp" />
+            <input type="number" id="height" min="0.1" step="0.1" inputmode="decimal" />
             <span>cm</span>
           </div>
-          <div id="heightHelp" class="input-help">10-300cm 범위로 입력</div>
-        </div>
-        
-        <div class="input-group">
-          <label for="bwt">체중</label>
+        </label>
+
+        <label>
+          체중
           <div class="age-row">
-            <input type="number" id="bwt" min="0.5" max="500" step="0.1" inputmode="decimal" aria-describedby="weightHelp" />
+            <input type="number" id="bwt" min="0.1" step="0.1" inputmode="decimal" />
             <span>kg</span>
           </div>
-          <div id="weightHelp" class="input-help">0.5-500kg 범위로 입력</div>
-        </div>
-        
+        </label>
+
         <button type="button" id="applyBtnBody" class="apply-btn">적용</button>
-        <div class="info-text">키, 체중은 소수점 첫째 자리까지 가능<br>둘째 자리 이상 입력하면<br>자동으로 반올림 처리됩니다.</div>
+
+        <div class="info-text">
+          키, 체중은 소수점 첫째 자리까지 가능<br>
+          둘쨰 자리 이상 입력하면<br>
+          자동으로 반올림 처리됩니다.
+        </div>
       </div>
 
       <!-- col 2-4: 환자정보 -->
       <div class="col2-4 col2-card">
         <h2 class="sub-title">환자정보</h2>
-        <div id="patientSexAge" class="patient-info-line" aria-live="polite"></div>
-        <div id="patientBody" class="patient-info-line" aria-live="polite"></div>
-        
-        <h3 class="sub-title">BSA 계산</h3>
-        <fieldset id="bsaMethodGroup" class="radio-group">
-          <legend class="sr-only">BSA 계산 공식 선택</legend>
-          <label class="radio-item">
-            <input type="radio" name="bsaMethod" value="mostellar" checked> 
-            <span>Mostellar</span>
-          </label>
-          <label class="radio-item">
-            <input type="radio" name="bsaMethod" value="dubois"> 
-            <span>Du Bois</span>
-          </label>
-          <label class="radio-item">
-            <input type="radio" name="bsaMethod" value="haycock"> 
-            <span>Haycock</span>
-          </label>
-        </fieldset>
-        <div id="patientBSA" class="patient-info-line" aria-live="polite">BSA = --/m²</div>
-        <div id="bsaCalculating" class="calculation-indicator" aria-live="polite"></div>
+        <div id="patientSexAge" class="patient-info-line"></div>
+        <div id="patientBody" class="patient-info-line"></div>
+
+        <h3 class="sub-title">BSA</h3>
+        <div id="bsaMethodGroup" class="radio-group" role="radiogroup" aria-label="BSA 계산 공식">
+          <label class="radio-item"><input type="radio" name="bsaMethod" value="mostellar" checked> Mostellar</label>
+          <label class="radio-item"><input type="radio" name="bsaMethod" value="dubois"> Du Bois</label>
+          <label class="radio-item"><input type="radio" name="bsaMethod" value="haycock"> Haycock</label>
+        </div>
+        <div id="patientBSA" class="patient-info-line"></div>
       </div>
 
-      <!-- col 2-5: 추가 기능 -->
+      <!-- col 2-5: 추가 영역 -->
       <div class="col2-5 col2-card">
-        <h2 class="sub-title">추가 기능</h2>
-        <div class="feature-list">
-          <div class="feature-item">
-            <strong>계산 공식 정보</strong>
-            <div class="formula-info">
-              <div><strong>Mostellar:</strong> √(키×체중/3600)</div>
-              <div><strong>Du Bois:</strong> 0.007184×키^0.725×체중^0.425</div>
-              <div><strong>Haycock:</strong> 0.024265×키^0.3964×체중^0.5378</div>
-            </div>
-          </div>
-          <div class="feature-item">
-            <strong>연령 구분</strong>
-            <div>성인: 연 단위, 영아: 월 단위, 신생아: 일 단위</div>
-          </div>
-        </div>
+        <h2 class="sub-title">col 2-5</h2>
+        <p>추가 영역</p>
       </div>
     </div>
 
-    <div class="title-box">계산 결과 정보</div>
+    <!-- col 3-0: Acting Information -->
+    <div class="title-box">Acting Information</div>
 
+    <!-- 개발용 테스트 -->
     <details id="dev-tests">
       <summary>개발용 테스트 보기</summary>
       <ul id="test-results"></ul>
     </details>
   </div>
 
-  <script src="assets/js/app.min.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      // 상태 및 매핑
+      var state = { gender: '', ageType: '', ageYears: null };
+      var ageMap = {
+        adult:   { unit: 'Years',  placeholder: '나이(년)',  labelOut: 'Adult',   factor: 1,     suffix: 'y' },
+        infant:  { unit: 'Months', placeholder: '나이(개월)', labelOut: 'Infant',  factor: 1/12,  suffix: 'm' },
+        neonate: { unit: 'Days',   placeholder: '나이(일)',  labelOut: 'NEONATE', factor: 1/365, suffix: 'd' }
+      };
+
+      // DOM 헬퍼
+      function $(sel) { return document.querySelector(sel); }
+      var form = $('#myForm');
+      var ageValueInput = $('#ageValue');
+      var ageUnitSpan   = $('#ageUnit');
+      var patientSexAgeDiv = $('#patientSexAge');
+      var patientBodyDiv   = $('#patientBody');
+      var heightInput = $('#height');
+      var bwtInput    = $('#bwt');
+
+      // 유틸
+      function getSexShort(g) {
+        return (g === 'Male') ? 'M' : (g === 'Female') ? 'F' : '';
+      }
+      function setChips(groupEl, value) {
+        groupEl.querySelectorAll('.chip').forEach(function (btn) {
+          var checked = (btn.dataset.value === value);
+          btn.setAttribute('aria-checked', checked);
+          btn.classList.toggle('active', checked);
+        });
+      }
+      function updateAgeUI() {
+        var cfg = ageMap[state.ageType] || {};
+        ageUnitSpan.textContent = cfg.unit || '';
+        ageValueInput.placeholder = cfg.placeholder || '숫자 입력';
+      }
+      function parseIntStrict(str) {
+        var n = Number(str);
+        return Number.isInteger(n) ? n : NaN;
+      }
+
+      // 키/체중: 소수 둘째 자리 이상 입력 시 자동 반올림(1자리)
+      function roundToOne(num) { return Math.round(num * 10) / 10; }
+      function formatOne(num) { return Number.isInteger(num) ? String(num) : num.toFixed(1); }
+      function validateHW(hStr, wStr) {
+        if (!hStr || !wStr) return { ok: false };
+        var h = parseFloat(hStr), w = parseFloat(wStr);
+        if (!isFinite(h) || !isFinite(w) || h < 0.1 || w < 0.1) return { ok: false };
+        return { ok: true, text: formatOne(roundToOne(h)) + 'cm/' + formatOne(roundToOne(w)) + 'kg' };
+      }
+
+      // 칩 클릭/키보드 이벤트
+      document.addEventListener('click', function (e) {
+        var btn = e.target.closest('.chip');
+        if (!btn) return;
+        var group = btn.closest('.chips');
+        var key = group ? group.getAttribute('data-target') : '';
+        if (!key) return;
+        state[key] = btn.dataset.value;
+        setChips(group, state[key]);
+        if (key === 'ageType') updateAgeUI();
+      });
+      document.addEventListener('keydown', function (e) {
+        if ((e.key === ' ' || e.key === 'Enter') && e.target.classList.contains('chip')) {
+          e.preventDefault();
+          e.target.click();
+        }
+      });
+
+      // 제출(성별/나이 표기)
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var gender = state.gender;
+        var ageType = state.ageType;
+        var ageRawStr = (ageValueInput.value || '').trim();
+
+        if (!gender || !ageType || ageRawStr === '') {
+          patientSexAgeDiv.textContent = '성별 연령구분 나이를 입력하세요';
+          return;
+        }
+        var ageRawNum = parseIntStrict(ageRawStr);
+        if (!Number.isInteger(ageRawNum) || ageRawNum <= 0) {
+          patientSexAgeDiv.textContent = '나이를 정확히 입력하세요';
+          return;
+        }
+
+        var cfg = ageMap[ageType];
+        state.ageYears = ageRawNum * cfg.factor;
+
+        var Sex = getSexShort(gender);
+        var display = '';
+        if (ageType === 'adult') {
+          display = cfg.labelOut + ' / ' + Sex + ' / ' + state.ageYears + 'y';
+        } else if (ageType === 'infant') {
+          display = cfg.labelOut + ' / ' + Sex + ' / ' + ageRawNum + 'm';
+        } else if (ageType === 'neonate') {
+          display = cfg.labelOut + ' / ' + Sex + ' / ' + ageRawNum + 'd';
+        }
+        patientSexAgeDiv.textContent = display;
+      });
+
+      // 신체치수 적용 버튼
+      $('#applyBtnBody').addEventListener('click', function () {
+        var result = validateHW(heightInput.value.trim(), bwtInput.value.trim());
+        patientBodyDiv.textContent = result.ok ? result.text : '키 체중을 정확히 입력하세요';
+        updateBSA();
+      });
+
+      // BSA 계산
+      function getSelectedBSAMethod() {
+        var el = document.querySelector('input[name="bsaMethod"]:checked');
+        return el ? el.value : 'mostellar';
+      }
+      function computeBSAValue(h, w, m) {
+        if (!isFinite(h) || !isFinite(w) || h <= 0 || w <= 0) return null;
+        if (m === 'mostellar') return Math.sqrt(h * w / 3600);
+        if (m === 'dubois')    return 0.007184 * Math.pow(h, 0.725) * Math.pow(w, 0.425);
+        if (m === 'haycock')   return 0.024265 * Math.pow(h, 0.3964) * Math.pow(w, 0.5378);
+        return null;
+      }
+      function formatBSAOutput(val) {
+        return (!val || !isFinite(val))
+          ? 'BSA = --/m²'
+          : 'BSA = ' + (Math.round(val * 100) / 100).toFixed(2) + '/m²';
+      }
+      function updateBSA() {
+        var h = parseFloat(heightInput.value);
+        var w = parseFloat(bwtInput.value);
+        var method = getSelectedBSAMethod();
+        var el = document.getElementById('patientBSA');
+        if (!isFinite(h) || !isFinite(w) || h < 0.1 || w < 0.1) {
+          el.textContent = 'BSA = --/m²';
+          return;
+        }
+        el.textContent = formatBSAOutput(
+          computeBSAValue(roundToOne(h), roundToOne(w), method)
+        );
+      }
+      document.getElementById('bsaMethodGroup').addEventListener('change', updateBSA);
+
+      // 초기화
+      updateAgeUI();
+      updateBSA();
+    })();
+  </script>
 </body>
 </html>
