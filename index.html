@@ -11,20 +11,27 @@
     <div class="top-layout">
       <div class="title-box">Sejong Anesthesiology Calculator</div>
       <div class="col1-2">
-        <div>Ver. 0.1 Build 2509-0021</div>
-        <div>2025/09/13 · Dr. Min</div>
+        <div>Ver. 0.2 Build 2509-0022</div>
+        <div>2025/09/14 · Dr. Min</div>
       </div>
     </div>
 
     <div class="layout">
       <!-- col 2-1: 로고 -->
       <div class="col2-1 col2-card">
-        <img alt="로고" src="purmi.png" width="300" style="width:300px;height:auto;object-fit:contain;" />
+        <div class="logo-placeholder">
+          <div class="logo-text">SEJONG</div>
+          <div class="logo-subtext">Anesthesiology</div>
+        </div>
       </div>
 
       <!-- col 2-2: 성별/연령/연령대 -->
       <div class="col2-2 col2-card">
         <h2 class="sub-title">성별, 연령, 연령대</h2>
+        
+        <!-- 오류 메시지 표시 영역 -->
+        <div id="errorMessage" class="error-message" role="alert" aria-live="polite"></div>
+        
         <form id="myForm" novalidate>
           <table class="form-table">
             <colgroup>
@@ -32,69 +39,122 @@
               <col style="width:70%">
             </colgroup>
             <tr>
-              <td class="label-cell">성별</td>
+              <td class="label-cell">
+                <label id="genderLabel">성별</label>
+              </td>
               <td>
-                <div class="chips" data-target="gender" role="radiogroup" aria-label="성별 선택">
-                  <button type="button" class="chip" data-value="Male" role="radio" aria-checked="false">Male</button>
-                  <button type="button" class="chip" data-value="Female" role="radio" aria-checked="false">Female</button>
+                <div class="chips" data-target="gender" role="radiogroup" aria-labelledby="genderLabel">
+                  <button type="button" class="chip" data-value="Male" role="radio" aria-checked="false" tabindex="0">Male</button>
+                  <button type="button" class="chip" data-value="Female" role="radio" aria-checked="false" tabindex="-1">Female</button>
                 </div>
               </td>
             </tr>
             <tr>
-              <td class="label-cell">연령<br>구분</td>
+              <td class="label-cell">
+                <label id="ageTypeLabel">연령<br>구분</label>
+              </td>
               <td>
-                <div class="chips" data-target="ageType" role="radiogroup" aria-label="연령 구분 선택">
-                  <button type="button" class="chip" data-value="adult" role="radio" aria-checked="false">Adult</button><br>
-                  <button type="button" class="chip" data-value="infant" role="radio" aria-checked="false">Infant</button>
-                  <button type="button" class="chip" data-value="neonate" role="radio" aria-checked="false">Neonate</button>
+                <div class="chips" data-target="ageType" role="radiogroup" aria-labelledby="ageTypeLabel">
+                  <button type="button" class="chip" data-value="adult" role="radio" aria-checked="false" tabindex="0">Adult</button>
+                  <button type="button" class="chip" data-value="infant" role="radio" aria-checked="false" tabindex="-1">Infant</button>
+                  <button type="button" class="chip" data-value="neonate" role="radio" aria-checked="false" tabindex="-1">Neonate</button>
                 </div>
               </td>
             </tr>
             <tr>
-              <td class="label-cell">나이</td>
+              <td class="label-cell">
+                <label for="ageValue">나이</label>
+              </td>
               <td>
                 <div class="age-row">
-                  <input type="number" id="ageValue" min="1" step="1" inputmode="numeric" />
-                  <span id="ageUnit"></span>
+                  <input type="number" id="ageValue" min="1" max="150" step="1" inputmode="numeric" aria-describedby="ageHelp" />
+                  <span id="ageUnit" aria-live="polite"></span>
                 </div>
+                <div id="ageHelp" class="input-help">연령 구분을 먼저 선택해주세요</div>
               </td>
             </tr>
           </table>
           <button type="submit" class="apply-btn">적용</button>
+          <button type="button" id="resetBtn" class="reset-btn">초기화</button>
         </form>
       </div>
 
       <!-- col 2-3: 신체치수 -->
       <div class="col2-3 col2-card">
         <h2 class="sub-title">신체치수</h2>
-        <label>키<div class="age-row"><input type="number" id="height" min="0.1" step="0.1" inputmode="decimal" /><span>cm</span></div></label>
-        <label>체중<div class="age-row"><input type="number" id="bwt" min="0.1" step="0.1" inputmode="decimal" /><span>kg</span></div></label>
+        
+        <!-- 신체치수 오류 메시지 -->
+        <div id="bodyErrorMessage" class="error-message" role="alert" aria-live="polite"></div>
+        
+        <div class="input-group">
+          <label for="height">키</label>
+          <div class="age-row">
+            <input type="number" id="height" min="10" max="300" step="0.1" inputmode="decimal" aria-describedby="heightHelp" />
+            <span>cm</span>
+          </div>
+          <div id="heightHelp" class="input-help">10-300cm 범위로 입력</div>
+        </div>
+        
+        <div class="input-group">
+          <label for="bwt">체중</label>
+          <div class="age-row">
+            <input type="number" id="bwt" min="0.5" max="500" step="0.1" inputmode="decimal" aria-describedby="weightHelp" />
+            <span>kg</span>
+          </div>
+          <div id="weightHelp" class="input-help">0.5-500kg 범위로 입력</div>
+        </div>
+        
         <button type="button" id="applyBtnBody" class="apply-btn">적용</button>
-        <div class="info-text">키, 체중은 소수점 첫째 자리까지 가능<br>둘쨰 자리 이상 입력하면<br>자동으로 반올림 처리됩니다.</div>
+        <div class="info-text">키, 체중은 소수점 첫째 자리까지 가능<br>둘째 자리 이상 입력하면<br>자동으로 반올림 처리됩니다.</div>
       </div>
 
       <!-- col 2-4: 환자정보 -->
       <div class="col2-4 col2-card">
         <h2 class="sub-title">환자정보</h2>
-        <div id="patientSexAge" class="patient-info-line"></div>
-        <div id="patientBody" class="patient-info-line"></div>
-        <h3 class="sub-title">BSA</h3>
-        <div id="bsaMethodGroup" class="radio-group" role="radiogroup" aria-label="BSA 계산 공식">
-          <label class="radio-item"><input type="radio" name="bsaMethod" value="mostellar" checked> Mostellar</label>
-          <label class="radio-item"><input type="radio" name="bsaMethod" value="dubois"> Du Bois</label>
-          <label class="radio-item"><input type="radio" name="bsaMethod" value="haycock"> Haycock</label>
-        </div>
-        <div id="patientBSA" class="patient-info-line"></div>
+        <div id="patientSexAge" class="patient-info-line" aria-live="polite"></div>
+        <div id="patientBody" class="patient-info-line" aria-live="polite"></div>
+        
+        <h3 class="sub-title">BSA 계산</h3>
+        <fieldset id="bsaMethodGroup" class="radio-group">
+          <legend class="sr-only">BSA 계산 공식 선택</legend>
+          <label class="radio-item">
+            <input type="radio" name="bsaMethod" value="mostellar" checked> 
+            <span>Mostellar</span>
+          </label>
+          <label class="radio-item">
+            <input type="radio" name="bsaMethod" value="dubois"> 
+            <span>Du Bois</span>
+          </label>
+          <label class="radio-item">
+            <input type="radio" name="bsaMethod" value="haycock"> 
+            <span>Haycock</span>
+          </label>
+        </fieldset>
+        <div id="patientBSA" class="patient-info-line" aria-live="polite">BSA = --/m²</div>
+        <div id="bsaCalculating" class="calculation-indicator" aria-live="polite"></div>
       </div>
 
-      <!-- col 2-5: 추가 영역 -->
+      <!-- col 2-5: 추가 기능 -->
       <div class="col2-5 col2-card">
-        <h2 class="sub-title">col 2-5</h2>
-        <p>추가 영역</p>
+        <h2 class="sub-title">추가 기능</h2>
+        <div class="feature-list">
+          <div class="feature-item">
+            <strong>계산 공식 정보</strong>
+            <div class="formula-info">
+              <div><strong>Mostellar:</strong> √(키×체중/3600)</div>
+              <div><strong>Du Bois:</strong> 0.007184×키^0.725×체중^0.425</div>
+              <div><strong>Haycock:</strong> 0.024265×키^0.3964×체중^0.5378</div>
+            </div>
+          </div>
+          <div class="feature-item">
+            <strong>연령 구분</strong>
+            <div>성인: 연 단위, 영아: 월 단위, 신생아: 일 단위</div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="title-box">Acting Information</div>
+    <div class="title-box">계산 결과 정보</div>
 
     <details id="dev-tests">
       <summary>개발용 테스트 보기</summary>
