@@ -7,42 +7,45 @@
 
   <style>
     :root {
-      --title-bg: #0052cc;
-      --title-fg: #fff;
-      --meta-fg: #c9d6ff;
-      --card-bg: #fff;
-      --card-bd: #ccc;
-      --page-bg: #f2f2f2;
+      --primary-blue: #0052cc;
+      --primary-white: #ffffff;
+      --secondary-blue: #e3f2fd;
+      --text-primary: #1565c0;
+      --text-secondary: #424242;
+      --border-color: #bbdefb;
+      --error-color: #d32f2f;
+      --success-color: #388e3c;
     }
 
     body {
       font-family: Arial, sans-serif;
       margin: 40px 0;
-      background: var(--page-bg);
+      background: #f2f2f2;
     }
 
     .container {
       width: 1600px;
       margin: 0 auto;
+      padding: 20px;
     }
 
     .title-box {
-      font-size: 28px;
+      font-size: 24px;
       font-weight: 700;
-      background: var(--title-bg);
-      color: var(--title-fg);
-      padding: 12px 16px;
+      background: var(--primary-blue);
+      color: var(--primary-white);
+      padding: 8px 16px;
       display: flex;
       align-items: center;
     }
 
     .sub-title {
-      margin: 0 0 12px 0;
-      font-size: 20px;
+      margin: 0 0 8px 0;
+      font-size: 18px;
       font-weight: 700;
-      background: var(--title-bg);
-      color: var(--title-fg);
-      padding: 6px 10px;
+      background: var(--primary-blue);
+      color: var(--primary-white);
+      padding: 4px 8px;
     }
 
     .top-layout {
@@ -52,10 +55,10 @@
     }
 
     .col1-2 {
-      background: var(--title-bg);
-      color: var(--meta-fg);
+      background: var(--primary-blue);
+      color: #c9d6ff;
       text-align: right;
-      padding: 12px 16px;
+      padding: 8px 16px;
       font-size: 12px;
       display: flex;
       flex-direction: column;
@@ -66,15 +69,15 @@
     .layout {
       display: grid;
       grid-template-columns: 300px 1fr 1fr 1fr 1fr;
-      gap: 16px;
+      gap: 12px;
       margin-bottom: 24px;
     }
 
     .col2-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-bd);
+      background: var(--primary-white);
+      border: 1px solid var(--border-color);
       border-radius: 6px;
-      padding: 16px;
+      padding: 12px;
     }
 
     .col2-1 img {
@@ -87,7 +90,7 @@
     .age-row {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       justify-content: center;
     }
 
@@ -95,11 +98,19 @@
       width: 50%;
       padding: 6px;
       margin-left: 10px;
+      border: 2px solid var(--border-color);
+      border-radius: 4px;
+    }
+
+    input[type="number"]:focus {
+      outline: 2px solid var(--primary-blue);
+      outline-offset: 2px;
+      border-color: var(--primary-blue);
     }
 
     .chips {
       display: flex;
-      gap: 8px;
+      gap: 6px;
       justify-content: center;
       flex-wrap: wrap;
     }
@@ -108,15 +119,21 @@
       border: 1px solid #888;
       padding: 6px 12px;
       border-radius: 999px;
-      background: #fff;
+      background: var(--primary-white);
       cursor: pointer;
       user-select: none;
+      transition: all 0.2s ease;
+    }
+
+    .chip:focus {
+      outline: 2px solid var(--primary-blue);
+      outline-offset: 2px;
     }
 
     .chip.active {
-      background: #1976d2;
-      color: #fff;
-      border-color: #1976d2;
+      background: var(--primary-blue);
+      color: var(--primary-white);
+      border-color: var(--primary-blue);
     }
 
     .apply-btn {
@@ -126,6 +143,15 @@
       padding: 6px 10px;
       font-size: 14px;
       cursor: pointer;
+      background: var(--primary-blue);
+      color: var(--primary-white);
+      border: none;
+      border-radius: 4px;
+    }
+
+    .apply-btn:focus {
+      outline: 2px solid var(--primary-blue);
+      outline-offset: 2px;
     }
 
     .patient-info-line {
@@ -133,6 +159,7 @@
       font-size: 16px;
       font-weight: 600;
       white-space: pre-line;
+      color: var(--text-primary);
     }
 
     .radio-group {
@@ -149,17 +176,19 @@
       align-items: center;
       gap: 6px;
       font-weight: 600;
+      color: var(--text-secondary);
     }
 
     .info-text {
       font-size: 14px;
       font-weight: 400;
-      color: #333;
+      color: var(--text-secondary);
       margin: 8px 0;
       text-align: center;
-      background: #f2f2f2;
+      background: var(--secondary-blue);
       padding: 8px;
       border: none;
+      border-radius: 4px;
     }
 
     /* 폼 테이블 좌측 라벨 셀 */
@@ -167,6 +196,48 @@
       text-align: center;
       font-weight: 600;
       vertical-align: middle;
+      color: var(--text-primary);
+    }
+
+    /* 검증 피드백 스타일 */
+    .validation-feedback {
+      font-size: 12px;
+      margin-top: 4px;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+
+    .validation-feedback.invalid {
+      background-color: #ffebee;
+      color: var(--error-color);
+      border-left: 3px solid var(--error-color);
+    }
+
+    .validation-feedback.valid {
+      background-color: #e8f5e8;
+      color: var(--success-color);
+      border-left: 3px solid var(--success-color);
+    }
+
+    /* 에러 메시지 스타일 */
+    .error-message {
+      color: var(--error-color);
+      font-weight: 500;
+      margin-top: 4px;
+    }
+
+    /* 개발용 테스트 영역 */
+    details {
+      margin-top: 16px;
+      padding: 12px;
+      background: var(--secondary-blue);
+      border-radius: 6px;
+    }
+
+    summary {
+      font-weight: 600;
+      color: var(--text-primary);
+      cursor: pointer;
     }
   </style>
 </head>
@@ -235,6 +306,7 @@
           </table>
 
           <button type="submit" class="apply-btn">적용</button>
+          <div id="ageErrorMessage" class="error-message"></div>
         </form>
       </div>
 
@@ -259,10 +331,11 @@
         </label>
 
         <button type="button" id="applyBtnBody" class="apply-btn">적용</button>
+        <div id="bodyErrorMessage" class="error-message"></div>
 
         <div class="info-text">
           키, 체중은 소수점 첫째 자리까지 가능<br>
-          둘쨰 자리 이상 입력하면<br>
+          둘째 자리 이상 입력하면<br>
           자동으로 반올림 처리됩니다.
         </div>
       </div>
@@ -280,17 +353,22 @@
           <label class="radio-item"><input type="radio" name="bsaMethod" value="haycock"> Haycock</label>
         </div>
         <div id="patientBSA" class="patient-info-line"></div>
+        <div id="bsaWarning" class="validation-feedback" style="display: none;"></div>
       </div>
 
       <!-- col 2-5: 추가 영역 -->
       <div class="col2-5 col2-card">
-        <h2 class="sub-title">col 2-5</h2>
-        <p>추가 영역</p>
+        <h2 class="sub-title">계산 공식 정보</h2>
+        <div style="font-size: 12px; line-height: 1.4; color: var(--text-secondary);">
+          <p><strong>Mostellar:</strong><br>√(키×체중/3600)</p>
+          <p><strong>Du Bois:</strong><br>0.007184×키^0.725×체중^0.425</p>
+          <p><strong>Haycock:</strong><br>0.024265×키^0.3964×체중^0.5378</p>
+        </div>
       </div>
     </div>
 
     <!-- col 3-0: Acting Information -->
-    <div class="title-box">Acting Information</div>
+    <div class="title-box">계산 결과 정보</div>
 
     <!-- 개발용 테스트 -->
     <details id="dev-tests">
@@ -306,9 +384,9 @@
       // 상태 및 매핑
       var state = { gender: '', ageType: '', ageYears: null };
       var ageMap = {
-        adult:   { unit: 'Years',  placeholder: '나이(년)',  labelOut: 'Adult',   factor: 1,     suffix: 'y' },
-        infant:  { unit: 'Months', placeholder: '나이(개월)', labelOut: 'Infant',  factor: 1/12,  suffix: 'm' },
-        neonate: { unit: 'Days',   placeholder: '나이(일)',  labelOut: 'NEONATE', factor: 1/365, suffix: 'd' }
+        adult:   { unit: 'Years',  placeholder: '나이(년)',  labelOut: 'Adult',   factor: 1,     suffix: 'y', max: 150 },
+        infant:  { unit: 'Months', placeholder: '나이(개월)', labelOut: 'Infant',  factor: 1/12,  suffix: 'm', max: 120 },
+        neonate: { unit: 'Days',   placeholder: '나이(일)',  labelOut: 'NEONATE', factor: 1/365, suffix: 'd', max: 365 }
       };
 
       // DOM 헬퍼
@@ -320,11 +398,15 @@
       var patientBodyDiv   = $('#patientBody');
       var heightInput = $('#height');
       var bwtInput    = $('#bwt');
+      var ageErrorDiv = $('#ageErrorMessage');
+      var bodyErrorDiv = $('#bodyErrorMessage');
+      var bsaWarningDiv = $('#bsaWarning');
 
       // 유틸
       function getSexShort(g) {
         return (g === 'Male') ? 'M' : (g === 'Female') ? 'F' : '';
       }
+      
       function setChips(groupEl, value) {
         groupEl.querySelectorAll('.chip').forEach(function (btn) {
           var checked = (btn.dataset.value === value);
@@ -332,24 +414,67 @@
           btn.classList.toggle('active', checked);
         });
       }
+      
       function updateAgeUI() {
         var cfg = ageMap[state.ageType] || {};
         ageUnitSpan.textContent = cfg.unit || '';
         ageValueInput.placeholder = cfg.placeholder || '숫자 입력';
+        ageValueInput.max = cfg.max || 150;
       }
+      
       function parseIntStrict(str) {
         var n = Number(str);
         return Number.isInteger(n) ? n : NaN;
+      }
+
+      // 검증 함수들
+      function validateAge(ageType, ageValue) {
+        if (!ageType) return '연령 구분을 선택해주세요';
+        if (!ageValue) return '나이를 입력해주세요';
+        
+        var numAge = parseIntStrict(ageValue);
+        if (isNaN(numAge) || numAge <= 0) return '양수 값을 입력해주세요';
+        
+        var cfg = ageMap[ageType];
+        if (numAge > cfg.max) {
+          var unitName = ageType === 'adult' ? '년' : ageType === 'infant' ? '개월' : '일';
+          return unitName + '은 ' + cfg.max + ' 이하로 입력해주세요';
+        }
+        return null;
+      }
+
+      function validateBodyMeasurements(height, weight) {
+        if (!height) return '키를 입력해주세요';
+        if (!weight) return '체중을 입력해주세요';
+        
+        var h = parseFloat(height);
+        var w = parseFloat(weight);
+        
+        if (isNaN(h) || h < 10 || h > 300) return '키는 10-300cm 범위로 입력해주세요';
+        if (isNaN(w) || w < 0.5 || w > 500) return '체중은 0.5-500kg 범위로 입력해주세요';
+        
+        return null;
+      }
+
+      // 피드백 표시 함수
+      function showValidationFeedback(element, message, isValid) {
+        if (message) {
+          element.textContent = message;
+          element.style.display = 'block';
+        } else {
+          element.style.display = 'none';
+        }
       }
 
       // 키/체중: 소수 둘째 자리 이상 입력 시 자동 반올림(1자리)
       function roundToOne(num) { return Math.round(num * 10) / 10; }
       function formatOne(num) { return Number.isInteger(num) ? String(num) : num.toFixed(1); }
       function validateHW(hStr, wStr) {
-        if (!hStr || !wStr) return { ok: false };
+        var error = validateBodyMeasurements(hStr, wStr);
+        if (error) return { ok: false, error: error };
+        
         var h = parseFloat(hStr), w = parseFloat(wStr);
-        if (!isFinite(h) || !isFinite(w) || h < 0.1 || w < 0.1) return { ok: false };
-        return { ok: true, text: formatOne(roundToOne(h)) + 'cm/' + formatOne(roundToOne(w)) + 'kg' };
+        return { ok: true, text: formatOne(roundToOne(h)) + 'cm / ' + formatOne(roundToOne(w)) + 'kg' };
       }
 
       // 칩 클릭/키보드 이벤트
@@ -362,7 +487,13 @@
         state[key] = btn.dataset.value;
         setChips(group, state[key]);
         if (key === 'ageType') updateAgeUI();
+        
+        // 에러 메시지 클리어
+        if (key === 'gender' || key === 'ageType') {
+          showValidationFeedback(ageErrorDiv, null, true);
+        }
       });
+      
       document.addEventListener('keydown', function (e) {
         if ((e.key === ' ' || e.key === 'Enter') && e.target.classList.contains('chip')) {
           e.preventDefault();
@@ -377,16 +508,18 @@
         var ageType = state.ageType;
         var ageRawStr = (ageValueInput.value || '').trim();
 
-        if (!gender || !ageType || ageRawStr === '') {
-          patientSexAgeDiv.textContent = '성별 연령구분 나이를 입력하세요';
-          return;
+        // 검증
+        var ageError = validateAge(ageType, ageRawStr);
+        if (!gender) {
+          ageError = '성별을 선택해주세요';
         }
-        var ageRawNum = parseIntStrict(ageRawStr);
-        if (!Number.isInteger(ageRawNum) || ageRawNum <= 0) {
-          patientSexAgeDiv.textContent = '나이를 정확히 입력하세요';
+        
+        if (ageError) {
+          showValidationFeedback(ageErrorDiv, ageError, false);
           return;
         }
 
+        var ageRawNum = parseIntStrict(ageRawStr);
         var cfg = ageMap[ageType];
         state.ageYears = ageRawNum * cfg.factor;
 
@@ -400,13 +533,19 @@
           display = cfg.labelOut + ' / ' + Sex + ' / ' + ageRawNum + 'd';
         }
         patientSexAgeDiv.textContent = display;
+        showValidationFeedback(ageErrorDiv, null, true);
       });
 
       // 신체치수 적용 버튼
       $('#applyBtnBody').addEventListener('click', function () {
         var result = validateHW(heightInput.value.trim(), bwtInput.value.trim());
-        patientBodyDiv.textContent = result.ok ? result.text : '키 체중을 정확히 입력하세요';
-        updateBSA();
+        if (result.ok) {
+          patientBodyDiv.textContent = result.text;
+          showValidationFeedback(bodyErrorDiv, null, true);
+          updateBSA();
+        } else {
+          showValidationFeedback(bodyErrorDiv, result.error, false);
+        }
       });
 
       // BSA 계산
@@ -414,6 +553,7 @@
         var el = document.querySelector('input[name="bsaMethod"]:checked');
         return el ? el.value : 'mostellar';
       }
+      
       function computeBSAValue(h, w, m) {
         if (!isFinite(h) || !isFinite(w) || h <= 0 || w <= 0) return null;
         if (m === 'mostellar') return Math.sqrt(h * w / 3600);
@@ -421,25 +561,65 @@
         if (m === 'haycock')   return 0.024265 * Math.pow(h, 0.3964) * Math.pow(w, 0.5378);
         return null;
       }
+      
       function formatBSAOutput(val) {
         return (!val || !isFinite(val))
           ? 'BSA = --/m²'
           : 'BSA = ' + (Math.round(val * 100) / 100).toFixed(2) + '/m²';
       }
+      
+      function checkBSARange(bsaValue) {
+        if (!bsaValue || !isFinite(bsaValue)) return null;
+        
+        // 일반적인 BSA 범위 (성인: 1.4-2.5 m², 소아: 더 넓은 범위)
+        if (bsaValue < 0.1) return '계산된 BSA가 매우 낮습니다. 입력값을 확인해주세요.';
+        if (bsaValue > 3.0) return '계산된 BSA가 매우 높습니다. 입력값을 확인해주세요.';
+        if (bsaValue > 2.5) return '일반적 범위보다 높은 BSA입니다.';
+        if (bsaValue < 0.2) return '일반적 범위보다 낮은 BSA입니다.';
+        
+        return null;
+      }
+      
       function updateBSA() {
         var h = parseFloat(heightInput.value);
         var w = parseFloat(bwtInput.value);
         var method = getSelectedBSAMethod();
         var el = document.getElementById('patientBSA');
+        
         if (!isFinite(h) || !isFinite(w) || h < 0.1 || w < 0.1) {
           el.textContent = 'BSA = --/m²';
+          bsaWarningDiv.style.display = 'none';
           return;
         }
-        el.textContent = formatBSAOutput(
-          computeBSAValue(roundToOne(h), roundToOne(w), method)
-        );
+        
+        var bsaValue = computeBSAValue(roundToOne(h), roundToOne(w), method);
+        el.textContent = formatBSAOutput(bsaValue);
+        
+        // BSA 범위 체크 및 경고
+        var warning = checkBSARange(bsaValue);
+        if (warning) {
+          bsaWarningDiv.textContent = warning;
+          bsaWarningDiv.className = 'validation-feedback invalid';
+          bsaWarningDiv.style.display = 'block';
+        } else {
+          bsaWarningDiv.style.display = 'none';
+        }
       }
+      
       document.getElementById('bsaMethodGroup').addEventListener('change', updateBSA);
+
+      // 입력 필드 실시간 검증
+      heightInput.addEventListener('input', function() {
+        showValidationFeedback(bodyErrorDiv, null, true);
+      });
+      
+      bwtInput.addEventListener('input', function() {
+        showValidationFeedback(bodyErrorDiv, null, true);
+      });
+      
+      ageValueInput.addEventListener('input', function() {
+        showValidationFeedback(ageErrorDiv, null, true);
+      });
 
       // 초기화
       updateAgeUI();
