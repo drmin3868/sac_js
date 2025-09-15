@@ -132,7 +132,6 @@ body {
   display: flex;
   gap: 6px;
   justify-content: center;
-  flex-wrap: wrap;
 }
 
 .button-group {
@@ -279,7 +278,6 @@ label {
   gap: 12px;
   align-items: center;
   margin-top: 8px;
-  flex-wrap: wrap;
   justify-content: center;
 }
 
@@ -348,8 +346,8 @@ label {
   object-fit: contain;
 }
 
-/* NE Calculator 컨테이너 */
-.ne-calc-container {
+/* Calculator 공통 컨테이너 */
+.calc-container {
   width: 320px;
   height: 320px;
   background-color: var(--primary-white);
@@ -357,6 +355,15 @@ label {
   border-radius: 6px;
   padding: 12px;
   margin: 0 auto;
+}
+
+/* 개별 Calculator 컨테이너 (공통 스타일 상속) */
+.ne-calc-container {
+  /* 추후 NE Calculator만의 고유한 스타일이 필요하면 여기에 추가 */
+}
+
+.dopa-calc-container {
+  /* 추후 Dopamine Calculator만의 고유한 스타일이 필요하면 여기에 추가 */
 }
 
 /* 단위 텍스트 */
@@ -378,8 +385,16 @@ label {
 
 /* 동적 컨텐츠 컨테이너 */
 #dynamic-content-container {
+  display: flex;
+  gap: 16px;
   align-items: flex-start;
   vertical-align: top;
+  justify-content: flex-start;
+}
+
+/* content-section을 side-by-side로 배치 */
+.content-section {
+  flex-shrink: 0;
 }
 
 /* iframe 스타일 */
@@ -389,30 +404,33 @@ iframe {
   border: none;
 }
 
-/* 반응형 디자인 */
-@media (max-width: 1200px) {
-  .grid-5-cols {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-  
-  .grid-2-cols {
-    grid-template-columns: 1fr;
-  }
+/* 타이틀 테이블 스타일 */
+.title-table {
+  width: 1200px;
+  border: none;
+  border-collapse: collapse;
+  margin-bottom: 24px;
 }
 
-@media (max-width: 768px) {
-  .container {
-    padding: 0 16px;
-  }
-  
-  .chip-group {
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .bsa-method-group {
-    flex-direction: column;
-    align-items: center;
-  }
+.title-table .title-cell {
+  width: 70%;
 }
+
+.title-table .version-cell {
+  width: 30%;
+}
+
+/* 로고 카드 스타일 */
+.logo-card {
+  width: 200px;
+}
+
+/* 폼 테이블 컬럼 스타일 */
+.form-table .col-narrow {
+  width: 20%;
+}
+
+.form-table .col-wide {
+  width: 80%;
+}
+

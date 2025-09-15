@@ -48,6 +48,13 @@ async function loadContents() {
                         setTimeout(updateNECalculator, 100);
                     });
                 }
+
+                // Dopamine Calculator 특별 처리 - 데이터 동기화
+                if (item.file === 'dopa_calc.html') {
+                    iframe.addEventListener('load', function() {
+                        setTimeout(updateDOPACalculator, 100);
+                    });
+                }
                 
             } else if (item.type === 'html') {
                 // HTML 직접 삽입
@@ -92,26 +99,26 @@ function updateNECalculator() {
     if (iframe && iframe.contentWindow && iframe.contentWindow.updateNECalc) {
         const heightInput = document.getElementById('height');
         const bwtInput = document.getElementById('bwt');
-        
+
         if (!heightInput || !bwtInput) return;
-        
+
         const height = parseFloat(heightInput.value);
         const weight = parseFloat(bwtInput.value);
-        
+
         // 현재 선택된 성별 가져오기
         const genderBtn = document.querySelector('.chip-group[data-target="gender"] .chip.selected');
         const gender = genderBtn ? genderBtn.dataset.value : null;
-        
+
         // BSA 계산
         let bsaValue = null;
         if (isFinite(height) && isFinite(weight) && height > 0 && weight > 0) {
             const methodEl = document.querySelector('input[name="bsaMethod"]:checked');
             const method = methodEl ? methodEl.value : 'mostellar';
-            
+
             // 소수점 첫째 자리로 반올림
             const h = Math.round(height * 10) / 10;
             const w = Math.round(weight * 10) / 10;
-            
+
             if (method === 'mostellar') {
                 bsaValue = Math.sqrt(h * w / 3600);
             } else if (method === 'dubois') {
@@ -120,9 +127,54 @@ function updateNECalculator() {
                 bsaValue = 0.024265 * Math.pow(h, 0.3964) * Math.pow(w, 0.5378);
             }
         }
-        
+
         // NE Calculator에 데이터 전송
         iframe.contentWindow.updateNECalc({
+            height: height,
+            weight: weight,
+            gender: gender,
+            bsa: bsaValue
+        });
+    }
+}
+
+// Dopamine Calculator 업데이트 함수
+function updateDOPACalculator() {
+    const iframe = document.getElementById('dopa_calc-frame');
+    if (iframe && iframe.contentWindow && iframe.contentWindow.updateDOPACalc) {
+        const heightInput = document.getElementById('height');
+        const bwtInput = document.getElementById('bwt');
+
+        if (!heightInput || !bwtInput) return;
+
+        const height = parseFloat(heightInput.value);
+        const weight = parseFloat(bwtInput.value);
+
+        // 현재 선택된 성별 가져오기
+        const genderBtn = document.querySelector('.chip-group[data-target="gender"] .chip.selected');
+        const gender = genderBtn ? genderBtn.dataset.value : null;
+
+        // BSA 계산
+        let bsaValue = null;
+        if (isFinite(height) && isFinite(weight) && height > 0 && weight > 0) {
+            const methodEl = document.querySelector('input[name="bsaMethod"]:checked');
+            const method = methodEl ? methodEl.value : 'mostellar';
+
+            // 소수점 첫째 자리로 반올림
+            const h = Math.round(height * 10) / 10;
+            const w = Math.round(weight * 10) / 10;
+
+            if (method === 'mostellar') {
+                bsaValue = Math.sqrt(h * w / 3600);
+            } else if (method === 'dubois') {
+                bsaValue = 0.007184 * Math.pow(h, 0.725) * Math.pow(w, 0.425);
+            } else if (method === 'haycock') {
+                bsaValue = 0.024265 * Math.pow(h, 0.3964) * Math.pow(w, 0.5378);
+            }
+        }
+
+        // Dopamine Calculator에 데이터 전송
+        iframe.contentWindow.updateDOPACalc({
             height: height,
             weight: weight,
             gender: gender,
@@ -144,18 +196,21 @@ document.addEventListener('DOMContentLoaded', function() {
     if (heightInput) {
         heightInput.addEventListener('input', function() {
             setTimeout(updateNECalculator, 100);
+            setTimeout(updateDOPACalculator, 100);
         });
     }
-    
+
     if (bwtInput) {
         bwtInput.addEventListener('input', function() {
             setTimeout(updateNECalculator, 100);
+            setTimeout(updateDOPACalculator, 100);
         });
     }
-    
+
     if (bsaMethodGroup) {
         bsaMethodGroup.addEventListener('change', function() {
             setTimeout(updateNECalculator, 100);
+            setTimeout(updateDOPACalculator, 100);
         });
     }
     
@@ -167,6 +222,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const key = group ? group.getAttribute('data-target') : '';
         if (key === 'gender') {
             setTimeout(updateNECalculator, 100);
+            setTimeout(updateDOPACalculator, 100);
         }
     });
 });

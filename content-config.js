@@ -9,6 +9,15 @@ const contentConfig = [
         height: 320,
         title: 'NE Calculator'
     },
+    {
+        file: 'dopa_calc.html',
+        active: true,
+        type: 'iframe',
+        width: 320,
+        height: 320,
+        title: 'Dopamine Calculator'
+    },
+
     // 향후 추가할 컨텐츠 예시
     // { 
     //     file: 'drug_calc.html', 

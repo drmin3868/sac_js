@@ -2,7 +2,6 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Sejong Anesthesiology Calculator</title>
   
   <link rel="stylesheet" href="main.css" />
@@ -13,10 +12,10 @@
 <body>
   <div class="container">
     <!-- 상단 타이틀 한 줄 -->
-    <table style="width:1200px; border:none; border-collapse:collapse; margin-bottom:24px;">
+    <table class="title-table">
       <tr>
-        <td class="title-bar" style="width:70%;">Sejong Anesthesiology Calculator (Under Development)</td>
-        <td class="version-info" style="width:30%;">
+        <td class="title-bar title-cell">Sejong Anesthesiology Calculator (Under Development)</td>
+        <td class="version-info version-cell">
           <div>Ver. 0.1 Build 2509-0025</div>
           <div>2025/09/15 · Anesthesiology Dr. Min</div>
         </td>
@@ -26,7 +25,7 @@
     <!-- 상단 5컬럼 -->
     <div class="grid-5-cols">
       <!-- col 2-1: 로고 -->
-      <div class="card" style="width:200px;">
+      <div class="card logo-card">
         <img alt="로고" src="purmi.png" class="logo" />
       </div>
 
@@ -36,8 +35,8 @@
         <form id="myForm" novalidate>
           <table class="form-table">
             <colgroup>
-              <col style="width:20%" />
-              <col style="width:80%" />
+              <col class="col-narrow" />
+              <col class="col-wide" />
             </colgroup>
 
             <!-- 행 1: 성별 -->
