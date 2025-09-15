@@ -22,8 +22,8 @@
       </tr>
     </table>
 
-    <!-- 상단 5컬럼 -->
-    <div class="grid-5-cols">
+    <!-- 상단 4컬럼 -->
+    <div class="grid-4-cols">
       <!-- col 2-1: 로고 -->
       <div class="card logo-card">
         <img alt="로고" src="purmi.png" class="logo" />
@@ -112,28 +112,23 @@
         <h2 class="card-header">환자정보</h2>
         <div id="patientSexAge" class="patient-info"></div>
         <div id="patientBody" class="patient-info"></div>
-
-        <div class="bsa-section">
-          <h3 class="card-header">BSA</h3>
-          <div id="bsaMethodGroup" class="bsa-method-group" role="radiogroup" aria-label="BSA 계산 공식">
-            <label><input type="radio" name="bsaMethod" value="mostellar" checked> Mostellar</label>
-            <label><input type="radio" name="bsaMethod" value="dubois"> Du Bois</label>
-            <label><input type="radio" name="bsaMethod" value="haycock"> Haycock</label>
-          </div>
+        <div class="bsa-section"></div>
           <div id="patientBSA" class="patient-info"></div>
           <div id="bsaWarning" class="bsa-warning"></div>
+          <div id="bsaMethodGroup" class="bsa-method-group" role="radiogroup" aria-label="BSA 계산 공식">
+            <label><input type="radio" name="bsaMethod" value="mostellar" checked> Mostellar<br></label>
+            <label><input type="radio" name="bsaMethod" value="dubois"> Du Bois<br></label>
+            <label><input type="radio" name="bsaMethod" value="haycock"> Haycock<br></label>
+          </div>
+          
+          <!-- BSA 공식 표시 영역 -->
+          <div id="bsaFormulaDisplay" class="bsa-formula-display">
+            <p><strong>Mostellar:</strong><br>√(키×체중/3600)</p>
+          </div>
+
         </div>
       </div>
 
-      <!-- col 2-5: 추가 영역 -->
-      <div class="card">
-        <h2 class="card-header">계산 공식 정보</h2>
-        <div class="info-box">
-          <p><strong>Mostellar:</strong><br>√(키×체중/3600)</p>
-          <p><strong>Du Bois:</strong><br>0.007184×키^0.725×체중^0.425</p>
-          <p><strong>Haycock:</strong><br>0.024265×키^0.3964×체중^0.5378</p>
-        </div>
-      </div>
     </div>
   </div>
   <!-- 동적 컨텐츠 컨테이너 -->
@@ -383,7 +378,27 @@
         }
       }
       
-      document.getElementById('bsaMethodGroup').addEventListener('change', updateBSA);
+      // BSA 공식 표시 업데이트 함수
+      function updateBSAFormula() {
+        var method = getSelectedBSAMethod();
+        var formulaDisplay = document.getElementById('bsaFormulaDisplay');
+        
+        var formulaText = '';
+        if (method === 'mostellar') {
+          formulaText = '<p><strong>Mostellar:</strong><br>√(키×체중/3600)</p>';
+        } else if (method === 'dubois') {
+          formulaText = '<p><strong>Du Bois:</strong><br>0.007184×키^0.725×체중^0.425</p>';
+        } else if (method === 'haycock') {
+          formulaText = '<p><strong>Haycock:</strong><br>0.024265×키^0.3964×체중^0.5378</p>';
+        }
+        
+        formulaDisplay.innerHTML = formulaText;
+      }
+      
+      document.getElementById('bsaMethodGroup').addEventListener('change', function() {
+        updateBSA();
+        updateBSAFormula();
+      });
 
       // 입력 필드 실시간 검증
       heightInput.addEventListener('input', function() {
@@ -407,6 +422,7 @@
       // 초기화
       updateAgeUI();
       updateBSA();
+      updateBSAFormula();
     })();
   </script>
 </body>

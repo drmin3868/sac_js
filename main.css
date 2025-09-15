@@ -59,9 +59,9 @@ body {
   margin-bottom: 24px;
 }
 
-.grid-5-cols {
+.grid-4-cols {
   display: grid;
-  grid-template-columns: 200px 300px 225px 250px 200px;
+  grid-template-columns: 200px 250px 225px 200px;
   gap: 10px;
   margin-bottom: 24px;
 }
@@ -129,9 +129,7 @@ body {
 /* 버튼 그룹 (칩 버튼과 계산기 버튼 통합) */
 .chip-group,
 .button-group {
-  display: flex;
   gap: 6px;
-  justify-content: center;
 }
 
 .button-group {
@@ -153,7 +151,6 @@ body {
 }
 
 .calc-button {
-  flex: 1;
   padding: 6px 8px;
   border-radius: 4px;
   font-size: 12px;
@@ -176,10 +173,7 @@ body {
 /* 입력 필드 그룹 */
 .input-group,
 .dose-input-group {
-  display: flex;
-  align-items: center;
   gap: 6px;
-  justify-content: center;
 }
 
 .dose-input-group {
@@ -274,20 +268,25 @@ label {
 }
 
 .bsa-method-group {
-  display: flex;
   gap: 12px;
-  align-items: center;
   margin-top: 8px;
-  justify-content: center;
 }
 
 .bsa-method-group label {
-  display: flex;
-  align-items: center;
   gap: 6px;
   font-weight: 600;
   color: var(--text-secondary);
   margin-bottom: 0;
+}
+
+.bsa-formula-display {
+  margin-top: 8px;
+  padding: 8px;
+  background-color: var(--secondary-blue);
+  border-radius: 4px;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.4;
 }
 
 .bsa-warning {
@@ -383,18 +382,19 @@ label {
   margin: 8px 0;
 }
 
-/* 동적 컨텐츠 컨테이너 */
+/* 동적 컨텐츠 컨테이너 - side-by-side 레이아웃 */
 #dynamic-content-container {
   display: flex;
+  flex-direction: row;
   gap: 16px;
   align-items: flex-start;
-  vertical-align: top;
-  justify-content: flex-start;
+  justify-content: center;
+  margin-top: 16px;
 }
 
 /* content-section을 side-by-side로 배치 */
 .content-section {
-  flex-shrink: 0;
+  flex: 0 0 auto;
 }
 
 /* iframe 스타일 */
