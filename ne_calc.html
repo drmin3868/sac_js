@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Norepinephrine C.I.</title>
+  
+  <link rel="stylesheet" href="main.css" />
+</head>
+
+<body>
+  <div class="ne-calc-container">
+    <!-- 소제목 -->
+    <h2 class="card-header">Norepinephrine C.I.</h2>
+    
+    <!-- 환자 정보 표시 -->
+    <div id="patientInfo" class="patient-data">
+      --cm/--kg BSA --m² BMI --
+    </div>
+    
+    <!-- IBW/ABW 정보 -->
+    <div id="bodyWeightInfo" class="body-weight-info">
+      TBW --kg IBW --kg ABW --kg
+    </div>
+    
+    <!-- 농도 선택 버튼 -->
+    <div class="button-group">
+      <button class="calc-button" data-value="20">20</button>
+      <button class="calc-button" data-value="80">80</button>
+      <button class="calc-button" data-value="100">100</button>
+      <button class="calc-button" data-value="200">200</button>
+    </div>
+    
+    <!-- 체중 타입 선택 버튼 -->
+    <div class="button-group">
+      <button class="calc-button" data-weight-type="TBW">TBW</button>
+      <button class="calc-button" data-weight-type="IBW">IBW</button>
+      <button class="calc-button" data-weight-type="ABW">ABW</button>
+    </div>
+    
+    <!-- 용량 입력 -->
+    <div class="dose-input-group">
+      <input type="number" id="doseInput" class="dose-input" min="0" step="0.1" inputmode="decimal" />
+      <span class="dose-unit">mcg/kg/min</span>
+    </div>
+    
+    <!-- 결과 표시 -->
+    <div id="result" class="result">
+      Flow Rate = -- cc/hour
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      'use strict';
+      
+      // 상태 변수
+      var state = {
+        height: null,
+        weight: null,
+        gender: null,
+        bsa: null,
+        bmi: null,
+        ibw: null,
+        abw: null,
+        concNE: null,
+        weightType: 'TBW',
+        doseNE: null
+      };
+      
+      // DOM 요소들
+      var patientInfoEl = document.getElementById('patientInfo');
+      var bodyWeightInfoEl = document.getElementById('bodyWeightInfo');
+      var doseInputEl = document.getElementById('doseInput');
+      var resultEl = document.getElementById('result');
+      
+      // 계산 함수들
+      function calculateBMI(height, weight) {
+        if (!height || !weight || height <= 0 || weight <= 0) return null;
+        return (weight / Math.pow(height / 100, 2));
+      }
+      
+      function calculateIBW(height, gender) {
+        if (!height || !gender || height <= 0) return null;
+        
+        // IBW 계산 공식 (Devine formula)
+        if (gender === 'Male') {
+          return 50 + (2.3 * ((height / 2.54) - 60));
+        } else {
+          return 45.5 + (2.3 * ((height / 2.54) - 60));
+        }
+      }
+      
+      function calculateABW(weight, ibw) {
+        if (!weight || !ibw || weight <= 0 || ibw <= 0) return null;
+        
+        // ABW = IBW + 0.4 * (TBW - IBW)
+        return ibw + (0.4 * (weight - ibw));
+      }
+      
+      function calculateFlowRate(doseNE, weight, concNE) {
+        if (!doseNE || !weight || !concNE || doseNE <= 0 || weight <= 0 || concNE <= 0) return null;
+        
+        // Flow Rate = doseNE * weight * 60 / concNE
+        return (doseNE * weight * 60) / concNE;
+      }
+      
+      // UI 업데이트 함수들
+      function updatePatientInfo() {
+        if (state.height && state.weight && state.bsa && state.bmi !== null) {
+          patientInfoEl.textContent = state.height + 'cm/' + state.weight + 'kg BSA ' + state.bsa.toFixed(2) + 'm² BMI ' + state.bmi.toFixed(1);
+        } else if (state.height && state.weight && state.bsa) {
+          patientInfoEl.textContent = state.height + 'cm/' + state.weight + 'kg BSA ' + state.bsa.toFixed(2) + 'm² BMI --';
+        } else {
+          patientInfoEl.textContent = '--cm/--kg BSA --m² BMI --';
+        }
+      }
+      
+      function updateBodyWeightInfo() {
+        if (state.weight && state.ibw !== null && state.abw !== null) {
+          bodyWeightInfoEl.textContent = 'TBW ' + state.weight + 'kg IBW ' + state.ibw.toFixed(1) + 'kg ABW ' + state.abw.toFixed(1) + 'kg';
+        } else {
+          bodyWeightInfoEl.textContent = 'TBW --kg IBW --kg ABW --kg';
+        }
+      }
+      
+      function updateResult() {
+        if (state.concNE && state.doseNE && state.weight) {
+          var flowRate = calculateFlowRate(state.doseNE, state.weight, state.concNE);
+          if (flowRate !== null) {
+            resultEl.textContent = 'Flow Rate = ' + flowRate.toFixed(1) + ' cc/hour';
+          } else {
+            resultEl.textContent = 'Flow Rate = -- cc/hour';
+          }
+        } else {
+          resultEl.textContent = 'Flow Rate = -- cc/hour';
+        }
+      }
+      
+      // 외부에서 데이터를 받는 함수
+      function updateFromParent(data) {
+        if (data.height) state.height = parseFloat(data.height);
+        if (data.weight) state.weight = parseFloat(data.weight);
+        if (data.gender) state.gender = data.gender;
+        if (data.bsa) state.bsa = parseFloat(data.bsa);
+        
+        // BMI, IBW, ABW 계산
+        if (state.height && state.weight) {
+          state.bmi = calculateBMI(state.height, state.weight);
+        }
+        
+        if (state.height && state.gender) {
+          state.ibw = calculateIBW(state.height, state.gender);
+        }
+        
+        if (state.weight && state.ibw) {
+          state.abw = calculateABW(state.weight, state.ibw);
+        }
+        
+        // UI 업데이트
+        updatePatientInfo();
+        updateBodyWeightInfo();
+        updateResult();
+      }
+      
+      // 버튼 이벤트 리스너
+      document.addEventListener('click', function(e) {
+        var button = e.target.closest('.calc-button');
+        if (!button) return;
+        
+        var group = button.parentElement;
+        var buttons = group.querySelectorAll('.calc-button');
+        
+        // 같은 그룹의 다른 버튼들 선택 해제
+        buttons.forEach(function(btn) {
+          btn.classList.remove('selected');
+        });
+        
+        // 클릭된 버튼 선택
+        button.classList.add('selected');
+        
+        // 농도 선택
+        if (button.dataset.value) {
+          state.concNE = parseFloat(button.dataset.value);
+        }
+        
+        // 체중 타입 선택
+        if (button.dataset.weightType) {
+          state.weightType = button.dataset.weightType;
+        }
+        
+        updateResult();
+      });
+      
+      // 용량 입력 이벤트
+      doseInputEl.addEventListener('input', function() {
+        var value = parseFloat(this.value);
+        state.doseNE = isNaN(value) ? null : value;
+        updateResult();
+      });
+      
+      // 외부에서 접근 가능하도록 전역 함수로 등록
+      window.updateNECalc = updateFromParent;
+      
+    })();
+  </script>
+</body>
+</html>

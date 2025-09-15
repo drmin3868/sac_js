@@ -5,324 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Sejong Anesthesiology Calculator</title>
   
-  <style>
-    /* CSS 변수 정의 */
-    :root {
-      --primary-blue: #0052cc;
-      --primary-white: #ffffff;
-      --secondary-blue: #e3f2fd;
-      --text-primary: #1565c0;
-      --text-secondary: #424242;
-      --border-color: #bbdefb;
-      --error-color: #d32f2f;
-      --success-color: #388e3c;
-      --gray-100: #f3f4f6;
-      --gray-500: #6b7280;
-      --gray-200: #e5e7eb;
-    }
-
-    /* 기본 스타일 */
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-      margin: 40px 0;
-      background-color: var(--gray-100);
-      line-height: 1.5;
-    }
-
-    .container {
-      width: 100%;
-      max-width: 1600px;
-      margin: 0 auto;
-      padding: 0 20px;
-    }
-
-    /* 그리드 레이아웃 */
-    .grid-2-cols {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-      margin-bottom: 24px;
-    }
-
-    .grid-5-cols {
-      display: grid;
-      grid-template-columns: 300px 1fr 1fr 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 24px;
-    }
-
-    /* 타이틀 스타일 */
-    .title-bar {
-      font-size: 24px;
-      font-weight: bold;
-      background-color: var(--primary-blue);
-      color: var(--primary-white);
-      padding: 8px 16px;
-      display: flex;
-      align-items: center;
-    }
-
-    .version-info {
-      background-color: var(--primary-blue);
-      color: #90caf9;
-      text-align: right;
-      padding: 8px 16px;
-      font-size: 12px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      line-height: 1.2;
-    }
-
-    /* 카드 스타일 */
-    .card {
-      background-color: var(--primary-white);
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      padding: 12px;
-    }
-
-    .card-header {
-      margin-bottom: 8px;
-      font-size: 18px;
-      font-weight: bold;
-      background-color: var(--primary-blue);
-      color: var(--primary-white);
-      padding: 4px 8px;
-    }
-
-    /* 폼 테이블 */
-    .form-table {
-      width: 100%;
-      table-layout: fixed;
-    }
-
-    .form-table colgroup col:first-child {
-      width: 30%;
-    }
-
-    .form-table colgroup col:last-child {
-      width: 70%;
-    }
-
-    .form-table td {
-      padding: 8px;
-    }
-
-    .form-table td:first-child {
-      text-align: center;
-      font-weight: 600;
-      vertical-align: middle;
-      color: var(--text-primary);
-    }
-
-    /* 칩 버튼 */
-    .chip-group {
-      display: flex;
-      gap: 6px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .chip {
-      border: 1px solid var(--gray-500);
-      padding: 6px 12px;
-      border-radius: 9999px;
-      background-color: var(--primary-white);
-      cursor: pointer;
-      user-select: none;
-      transition: all 0.2s ease;
-      font-size: 14px;
-    }
-
-    .chip:focus {
-      outline: none;
-      box-shadow: 0 0 0 2px var(--primary-blue);
-    }
-
-    .chip.selected {
-      border-color: var(--primary-blue);
-      background-color: var(--primary-blue);
-      color: var(--primary-white);
-    }
-
-    /* 입력 필드 */
-    .input-group {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      justify-content: center;
-    }
-
-    .custom-input {
-      width: 50%;
-      padding: 6px;
-      margin-left: 10px;
-      border: 2px solid var(--border-color);
-      border-radius: 4px;
-      font-size: 14px;
-    }
-
-    .custom-input:focus {
-      outline: 2px solid var(--primary-blue);
-      outline-offset: 2px;
-      border-color: var(--primary-blue);
-    }
-
-    /* 라벨 */
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 500;
-      color: var(--text-primary);
-    }
-
-    /* 버튼 */
-    .btn {
-      margin: 20px auto 0;
-      display: block;
-      width: 120px;
-      padding: 6px 10px;
-      font-size: 14px;
-      cursor: pointer;
-      background-color: var(--primary-blue);
-      color: var(--primary-white);
-      border: none;
-      border-radius: 4px;
-    }
-
-    .btn:focus {
-      outline: none;
-      box-shadow: 0 0 0 2px var(--primary-blue);
-    }
-
-    /* 에러 메시지 */
-    .error-message {
-      color: var(--error-color);
-      font-weight: 500;
-      margin-top: 4px;
-    }
-
-    /* 환자 정보 */
-    .patient-info {
-      margin-top: 8px;
-      font-size: 16px;
-      font-weight: 600;
-      white-space: pre-line;
-      color: var(--text-primary);
-    }
-
-    /* BSA 섹션 */
-    .bsa-section {
-      margin-top: 16px;
-    }
-
-    .bsa-method-group {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      margin-top: 8px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .bsa-method-group label {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-weight: 600;
-      color: var(--text-secondary);
-      margin-bottom: 0;
-    }
-
-    .bsa-warning {
-      font-size: 12px;
-      margin-top: 4px;
-      padding: 8px;
-      border-radius: 4px;
-      display: none;
-    }
-
-    .bsa-warning.success {
-      background-color: #e8f5e8;
-      color: var(--success-color);
-      border-left: 4px solid var(--success-color);
-    }
-
-    .bsa-warning.error {
-      background-color: #ffebee;
-      color: var(--error-color);
-      border-left: 4px solid var(--error-color);
-    }
-
-    /* 정보 박스 */
-    .info-box {
-      font-size: 12px;
-      font-weight: normal;
-      color: var(--text-secondary);
-      margin: 8px 0;
-      text-align: center;
-      background-color: var(--secondary-blue);
-      padding: 8px;
-      border: none;
-      border-radius: 4px;
-      line-height: 1.4;
-    }
-
-    /* 개발용 테스트 */
-    .dev-tests {
-      margin-top: 16px;
-      padding: 12px;
-      background-color: var(--secondary-blue);
-      border-radius: 6px;
-    }
-
-    .dev-tests summary {
-      font-weight: 600;
-      color: var(--text-primary);
-      cursor: pointer;
-    }
-
-    /* 로고 */
-    .logo {
-      width: 300px;
-      height: auto;
-      display: block;
-      object-fit: contain;
-    }
-
-    /* 반응형 */
-    @media (max-width: 1200px) {
-      .grid-5-cols {
-        grid-template-columns: 1fr;
-        gap: 16px;
-      }
-      
-      .grid-2-cols {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .container {
-        padding: 0 16px;
-      }
-      
-      .chip-group {
-        flex-direction: column;
-        align-items: center;
-      }
-      
-      .bsa-method-group {
-        flex-direction: column;
-        align-items: center;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="main.css" />
+  <script src="content-config.js"></script>
+  <script src="main.js"></script>
 </head>
 
 <body>
@@ -339,7 +24,7 @@
     <!-- 상단 5컬럼 -->
     <div class="grid-5-cols">
       <!-- col 2-1: 로고 -->
-      <div class="card">
+      <div class="card" style="width:200px;">
         <img alt="로고" src="purmi.png" class="logo" />
       </div>
 
@@ -347,7 +32,7 @@
       <div class="card">
         <h2 class="card-header">성별, 연령, 연령대</h2>
         <form id="myForm" novalidate>
-          <table class="form-table" style="width:100%;table-layout:fixed;">
+          <table class="form-table" style="width:400px;table-layout:fixed;">
             <colgroup>
               <col style="width:30%" />
               <col style="width:70%" />
@@ -388,7 +73,6 @@
             </tr>
           </table>
 
-          <button type="submit" class="btn">적용</button>
           <div id="ageErrorMessage" class="error-message"></div>
         </form>
       </div>
@@ -413,7 +97,6 @@
           </div>
         </label>
 
-        <button type="button" id="applyBtnBody" class="btn">적용</button>
         <div id="bodyErrorMessage" class="error-message"></div>
 
         <div class="info-box">
@@ -452,14 +135,10 @@
       </div>
     </div>
 
-    <!-- col 3-0: Acting Information -->
-    <div class="title-bar">계산 결과 정보</div>
-
-    <!-- 개발용 테스트 -->
-    <details id="dev-tests" class="dev-tests">
-      <summary>개발용 테스트 보기</summary>
-      <ul id="test-results"></ul>
-    </details>
+    <!-- 동적 컨텐츠 컨테이너 -->
+    <div id="dynamic-content-container">
+      <!-- 모든 동적 컨텐츠가 여기에 로드됨 -->
+    </div>
   </div>
 
   <script>
@@ -568,7 +247,7 @@
         if (error) return { ok: false, error: error };
         
         var h = parseFloat(hStr), w = parseFloat(wStr);
-        return { ok: true, text: formatOne(roundToOne(h)) + 'cm / ' + formatOne(roundToOne(w)) + 'kg' };
+        return { ok: true, text: formatOne(roundToOne(h)) + 'cm / ' + w.toFixed(1) + 'kg' };
       }
 
       // 칩 클릭/키보드 이벤트
@@ -586,6 +265,9 @@
         if (key === 'gender' || key === 'ageType') {
           showValidationFeedback(ageErrorDiv, null, true);
         }
+        
+        // 환자 정보 실시간 업데이트
+        updatePatientInfo();
       });
       
       document.addEventListener('keydown', function (e) {
@@ -595,9 +277,8 @@
         }
       });
 
-      // 제출(성별/나이 표기)
-      form.addEventListener('submit', function (e) {
-        e.preventDefault();
+      // 환자 정보 실시간 업데이트 함수
+      function updatePatientInfo() {
         var gender = state.gender;
         var ageType = state.ageType;
         var ageRawStr = (ageValueInput.value || '').trim();
@@ -610,6 +291,7 @@
         
         if (ageError) {
           showValidationFeedback(ageErrorDiv, ageError, false);
+          patientSexAgeDiv.textContent = '';
           return;
         }
 
@@ -628,10 +310,10 @@
         }
         patientSexAgeDiv.textContent = display;
         showValidationFeedback(ageErrorDiv, null, true);
-      });
+      }
 
-      // 신체치수 적용 버튼
-      $('#applyBtnBody').addEventListener('click', function () {
+      // 신체치수 실시간 업데이트 함수
+      function updateBodyInfo() {
         var result = validateHW(heightInput.value.trim(), bwtInput.value.trim());
         if (result.ok) {
           patientBodyDiv.textContent = result.text;
@@ -639,8 +321,9 @@
           updateBSA();
         } else {
           showValidationFeedback(bodyErrorDiv, result.error, false);
+          patientBodyDiv.textContent = '';
         }
-      });
+      }
 
       // BSA 계산
       function getSelectedBSAMethod() {
@@ -705,15 +388,21 @@
       // 입력 필드 실시간 검증
       heightInput.addEventListener('input', function() {
         showValidationFeedback(bodyErrorDiv, null, true);
+        updateBodyInfo();
       });
       
       bwtInput.addEventListener('input', function() {
         showValidationFeedback(bodyErrorDiv, null, true);
+        updateBodyInfo();
       });
       
       ageValueInput.addEventListener('input', function() {
         showValidationFeedback(ageErrorDiv, null, true);
+        updatePatientInfo();
       });
+
+      // updateNECalculator 함수는 main.js로 이동됨
+      // 이벤트 리스너들도 main.js의 DOMContentLoaded에서 처리됨
 
       // 초기화
       updateAgeUI();
