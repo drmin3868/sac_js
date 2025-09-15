@@ -30,6 +30,9 @@ async function loadContents() {
                 iframe.height = item.height || 320;
                 iframe.frameBorder = '0';
                 iframe.style.display = 'block';
+                iframe.style.border = 'none';
+                iframe.style.overflow = 'hidden';
+                iframe.scrolling = 'no';
                 iframe.id = item.file.replace('.html', '-frame');
                 
                 // 타이틀이 있으면 추가
