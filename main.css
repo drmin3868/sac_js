@@ -33,6 +33,16 @@ body {
   padding: 0;
 }
 
+/* ne_calc.html iframe 내부 상단 여백 제거 */
+.ne-calc-container {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.ne-calc-container .card-header:first-child {
+  margin-top: 0;
+}
+
 /* 컨테이너 */
 .container {
   width: 100%;
@@ -63,8 +73,6 @@ body {
   background-color: var(--primary-blue);
   color: var(--primary-white);
   padding: 8px 16px;
-  display: flex;
-  align-items: center;
 }
 
 .version-info {
@@ -73,9 +81,6 @@ body {
   text-align: right;
   padding: 8px 16px;
   font-size: 12px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
   line-height: 1.2;
 }
 
@@ -356,7 +361,8 @@ label {
 
 /* 단위 텍스트 */
 .dose-unit {
-  font-size: 12px;
+  font-size: 18px;
+  font-weight: bold;
   color: var(--text-secondary);
 }
 
@@ -368,6 +374,19 @@ label {
   color: var(--text-primary);
   text-align: center;
   margin: 8px 0;
+}
+
+/* 동적 컨텐츠 컨테이너 */
+#dynamic-content-container {
+  align-items: flex-start;
+  vertical-align: top;
+}
+
+/* iframe 스타일 */
+iframe {
+  vertical-align: top;
+  margin-top: 0;
+  border: none;
 }
 
 /* 반응형 디자인 */
